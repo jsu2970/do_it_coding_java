@@ -1,0 +1,29 @@
+import java.util.*;
+
+public class num1 {
+    public static void main(String[] args)
+    {
+        long beforeTime = System.currentTimeMillis();  //실행 전 시간
+
+        int num1;
+        long num2, tempNum2, sum = 0;  //숫자가 매우 클 수 있음
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("숫자의 개수: ");
+        num1 = sc.nextInt();
+        System.out.print("공백 없이 주어진 N개의 숫자: ");
+        num2 = sc.nextLong();
+
+        tempNum2 = num2;
+        for (int i = 0; i < num1; i++)
+        {
+            long divide = (long)Math.pow(10, (double)(num1 - i - 1));  //몫을 구해서 각 자리의 숫자를 구함
+            sum += (long)tempNum2 / divide;
+            tempNum2 %= divide;  //나머지로 남은 부분의 숫자들만 남김
+        }
+        System.out.printf("결과: %d\n", sum);
+
+        long afterTime = System.currentTimeMillis();  //실행 후 시간
+        System.out.println("실행 시간: " + (afterTime - beforeTime)/ 1000 + "초");
+    }
+}
