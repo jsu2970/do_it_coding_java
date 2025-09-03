@@ -1,0 +1,76 @@
+import java.util.*;
+
+public class do_it_3 {
+    public static void  main(String arg[])
+    {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("데이터 개수, 구하려는 구간 합 개수 입력: ");
+        int numData = sc.nextInt();
+        int calc = sc.nextInt();
+
+        //배열 완성
+        int[] arr = new int[numData];
+        System.out.print("배열 입력: ");
+        for (int i = 0; i < numData; i++)
+        {
+            arr[i] = sc.nextInt();
+        }
+
+        //구간 입력
+        int[] calcArr = new int[calc * 2];
+        System.out.println("구간 입력:");
+        for (int i = 0; i < calc * 2; i++)
+        {
+            calcArr[i] = sc.nextInt();
+        }
+
+        //현재 시간 저장
+        long beforeTime = System.currentTimeMillis();
+
+        /*
+            0 인덱스부터 마지막 인덱스까지의 구간합을 가진 배열을 가지고 있다면 그 전까지의 구간합을 빼면 특정 구간의 구간 합을 구할 수 있음
+            ex) 2인덱스부터 4인덱스까지의 구간합을 구하는 경우, 4인덱스까지의 구간합에서 1인덱스까지의 구간합을 빼면 2 ~ 4이의 합을 구할 수 있음
+         */
+
+        //구간 합 구하기 (구간은 인덱스 + 1임을 유의 해야함)
+        long[] sum = new long[numData];
+        for (int i = 0; i < numData; i++)
+        {
+            //초기 상태 고려
+            if (i == 0)
+            {
+                sum[i] = arr[i];
+            }
+            else
+            {
+                sum[i] = sum[i - 1] + arr[i];
+            }
+        }
+
+        //요구하는 구간 합 구하기
+        for (int i = 0; i < calc * 2; i += 2)
+        {
+            //구간을 인덱스로 변환
+            int indexFront = calcArr[i] - 1;
+            int indexEnd = calcArr[i + 1] - 1;
+
+            //구간 합 계산
+            long result;
+
+            //구간이 맨 앞을 포함하는 경우 빼줄 필요 없음
+            if (indexFront == 0)
+            {
+                result = sum[indexEnd];
+            }
+            else
+                result = sum[indexEnd] - sum[indexFront - 1];  //구하려는 구간보다 앞의 부분을 빼야함
+
+            System.out.println((indexFront + 1) + " ~ " + (indexEnd + 1) + "까지의 구간 합: " + result);
+        }
+
+        //총 걸린 시간을 계산하는 과정
+        long afterTime = System.currentTimeMillis();
+        System.out.println("총 소요 시간: " + (afterTime - beforeTime) / 1000 + "초");
+    }
+}
