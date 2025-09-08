@@ -1,0 +1,62 @@
+import java.util.*;
+
+//10986
+public class num5 {
+    public static void main(String[] args)
+    {
+        int arrSize, question;
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("1차원 배열 크기, 나누어 떨어지는 부분 합을 구할 숫자: ");
+        arrSize = sc.nextInt();
+        question = sc.nextInt();
+
+        //배열 완성
+        System.out.println("배열 입력: ");
+        int[] arr = new int[arrSize];
+        for (int i = 0; i < arrSize; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        long beforeTime = System.currentTimeMillis();  //실행 전 시간
+
+        int result = 0;  //총 개수
+        int[] arrQuesion = new int[question];  //question의 나머지의 개수를 기록하기 위함 ex) 3인 경우 0, 1 ,2의 나머지 개수를 기록함
+
+        //구간 합 배열 완성과 함께 question값으로 나눠주기
+        int[] arrMod = new int[arrSize];
+        int partSum = 0;
+        for (int i = 0; i < arrSize; i++) {
+            partSum += arr[i];
+            arrMod[i] = partSum % question;
+
+            //부분합에서 mod연산이 0인 부분은 나누어 떨어지는 구간이므로 개수에 포함
+            if (arrMod[i] == 0) {
+                result++;
+            }
+
+            //나머지 종류에 따라 총 개수 기록
+            arrQuesion[arrMod[i]]++;
+        }
+
+        /*
+
+        나머지가 같은 구간끼리 짝지으면 서로 뺏을때 나머지가 0이 되어 문제에서 요구하는 조건을 만족할 수 있다.
+        ex) 나머지가 1인 구간이 인덱스 1, 4라고 가정한다면, (4인덱스 부분합 - 1인덱스 부분합)을 하면 2개의 나머지의 차이인 1 - 1 = 0이 되어서
+        부분합을 question으로 나눈 값이 0인 경우가 나온다.
+        이것은 인덱스 2, 3 ,4까지를 합해서 question으로 나눈 값이 0이라는 하나의 경우를 알 수 있게 된다.
+        따라서 나머지 부분이 같은 것을 2개 짝짓는 경우의 수를 구하면 된다.
+
+         */
+
+        //나머지가 같은 인덱스들의 경우의 수 구하기 -> X개 중 2개를 뽑는 경우의 수로 풀 수 있음
+        for (int i = 0; i < question; i++) {
+            result += arrQuesion[i] * (arrQuesion[i] - 1) / 2;
+        }
+
+        System.out.println("구간 별로의 나누어 떨어지는 개수: " + result);
+
+        long afterTime = System.currentTimeMillis();  //실행 후 시간
+        System.out.println("실행 시간: " + (afterTime - beforeTime)/ 1000 + "초");
+    }
+}
