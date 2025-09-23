@@ -1,0 +1,59 @@
+import java.util.*;
+
+class Node {  //덱에 삽입될 노드
+    int index;
+    int value;
+
+    Node (int index, int value) {
+        this.index = index;
+        this.value = value;
+    }
+}
+
+public class do_it_num10 {  //11003
+    public static void main(String arg[]) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("숫자의 개수, 슬라이드 개수 입력: ");
+        int length = sc.nextInt();  //전체 배열 길이
+        int slideLength = sc.nextInt();  //검사할 윈도우 크기
+
+        int arr[] = new int[length];
+        System.out.println("숫자 배열 입력(1이상의 숫자): ");
+        for (int i = 0; i < length; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        long beforeTime = System.currentTimeMillis();  //시작 시간
+
+        //덱 구조로 배열을 정렬함 -> 뒤에서 삽입하면서 삭제하는 것은 O(n), 첫번째 원소값을 확인해 최소값은 O(1)이기 때문임
+        Deque<Node> deck = new ArrayDeque<Node>();
+
+        int start = 0, end = slideLength - 1;  //슬라이드의 인덱스
+
+        for (int i = 0; i < length; i++) {
+            while (!deck.isEmpty() && arr[i] < deck.getLast().value) {  //새로 들어올 값이 기존의 덱의 맨 마지막 값보다 작다면 기존 값을 제거함
+                deck.removeLast();
+            }
+            Node nd = new Node(i, arr[i]);  //노드를 생성해서 삽입함
+            deck.addLast(nd);
+
+            if (deck.getLast().index == end) {  //사용자가 지정한 윈도우 크기를 채운 후 부터, 첫번째 인덱스의 값(최솟값)을 출력함
+                System.out.print(deck.getFirst().value + " ");
+
+                start++;  //한 슬라이드에 대한 검사가 끝났으므로 다음 슬라이드로 이동함
+                end++;
+
+                if (deck.getFirst().index == start - 1) {  //이동 후에 이전 슬라이드의 첫번째 값을 제거함
+                    deck.removeFirst();
+                }
+            }
+        }
+
+        System.out.println();
+
+        //총 걸린 시간을 계산하는 과정
+        long afterTime = System.currentTimeMillis();
+        System.out.println("총 소요 시간: " + (afterTime - beforeTime) / 1000 + "초");
+    }
+}
