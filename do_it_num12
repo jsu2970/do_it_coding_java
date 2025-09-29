@@ -1,0 +1,48 @@
+import java.util.*;
+
+public class do_it_num12 {  //17298
+    public static void main(String arg[]) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("수열의 개수: ");
+        int length = sc.nextInt();
+
+        int arr[] = new int[length];
+        System.out.println("배열 입력: ");
+        for (int i = 0; i < length; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        long beforeTime = System.currentTimeMillis();  //시작 시간
+
+        int result[] = new int[length];  //정답을 저장하는 배열
+
+        //오큰수를 찾지 못한 값들은 차례로 스택에 저장됨
+        Stack<Integer> stack = new Stack<>();
+        stack.push(0);
+        for (int i = 1; i < length; i++) {
+            if (arr[stack.peek()] >= arr[i]) {  //오큰수가 아닌 경우
+                stack.push(i);  //나중의 계산을 위해 인덱스를 삽입함
+            }
+            else if (arr[stack.peek()] < arr[i]) {  //오큰수인 경우
+                while (!stack.isEmpty() && arr[stack.peek()] < arr[i]) {  //현재 숫자로 오큰수를 만족하는 모든 값을 저장함
+                    result[stack.pop()] = arr[i];
+                }
+
+                stack.push(i);
+            }
+        }
+        while (!stack.isEmpty()) {  //스택에 남은 값들은 모두 오큰수가 존재하지 않으므로 -1을 저장함
+            result[stack.pop()] = -1;
+        }
+
+        for (int i = 0; i < length; i++) {
+            System.out.print(result[i] + " ");
+        }
+        System.out.println();
+
+        //총 걸린 시간을 계산하는 과정
+        long afterTime = System.currentTimeMillis();
+        System.out.println("총 소요 시간: " + (afterTime - beforeTime) / 1000 + "초");
+    }
+}
