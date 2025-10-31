@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class do_it_num18 {  //11399
+    public static void main(String arg[]) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("데이터 개수 입력: ");
+        int length = sc.nextInt();
+
+        System.out.println("차례대로 대기시간 입력: ");
+        int arr[] = new int[length];
+        for (int i = 0; i < length; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        long beforeTime = System.currentTimeMillis();  //시작 시간
+
+        //삽입 정렬을 이용하여 문제 해결 -> 뒤로 검색하면서 제일 작은 숫자를 맨 앞으로 보냄
+        for (int i = 0; i < length; i++) {
+            int current = arr[i];  //현재 삽입하려는 값
+            int index = i;  //삽입할 곳의 인덱스 (기준점은 현재 시작하는 인덱스)
+
+            for (int j = i; j > 0; j--) {  //뒤로 가면서 삽입할 인덱스 위치를 찾음 (인덱스j 이전의 배열은 정렬되어 있음)
+                if (current < arr[j - 1]) {  //j위치의 값이 j-1위치의 값보다 작은 경우
+                    index = j - 1;
+                }
+                else {  //j위치의 값이 j-1위치보다 큰 경우, 삽입할 위치를 찾았으므로 탈출함
+                    break;
+                }
+            }
+
+            //찾은 인덱스 위치를 포함하여 나머지 배열 값들을 뒤로 한 칸씩 밀음
+            for (int j = i; j > index; j--) {
+                arr[j] = arr[j-1];
+            }
+            arr[index] = current;  //찾은 위치에 배열값 삽입
+        }
+
+        //기존 배열을 대기 시간 배열로 변경
+        for (int i = 1; i < length; i++) {
+            arr[i] += arr[i-1];
+        }
+
+        int sum = 0;
+        for (int num : arr) {
+            sum += num;
+        }
+        System.out.println(sum);
+
+        //총 걸린 시간을 계산하는 과정
+        long afterTime = System.currentTimeMillis();
+        System.out.println("총 소요 시간: " + (afterTime - beforeTime) / 1000 + "초");
+    }
+}
