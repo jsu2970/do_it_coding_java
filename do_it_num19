@@ -1,0 +1,71 @@
+import java.util.*;
+
+class QuickSort {
+    int arr[];
+
+    QuickSort (int arr[]) {
+        this.arr = arr;
+
+        sort (0, arr.length - 1);
+    }
+
+    public void sort(int left, int right) {
+        int temp;
+        int start = left;
+        int end = right;
+        int pivot = arr[(left + right) / 2];
+
+        while (left <= right) {
+            while (arr[left] < pivot) {  //피벗보다 큰 숫자를 만날 때 까지 이동
+                left++;
+            }
+            while (arr[right] > pivot) {  //피벗보다 작은 숫자를 만날 때 까지 이동
+                right--;
+            }
+
+            if (left <= right) {
+                temp = arr[left];
+                arr[left] = arr[right];
+                arr[right] = temp;
+
+                left++;  //스왑이 일어난 경우 증감
+                right--;
+            }
+        }
+
+        //재귀를 멈추게 해주는 조건
+        if (start < right) {
+            sort(start, right);
+        }
+        if (left < end) {
+            sort(left, end);
+        }
+    }
+}
+
+public class do_it_num19 {  //11004
+    public static void main(String arg[]) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("데이터 개수, 찾을 인덱스 입력: ");
+        int length = sc.nextInt();
+        int index = sc.nextInt();
+
+        System.out.println("배열 입력: ");
+        int arr[] = new int[length];
+        for (int i = 0; i < length; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        long beforeTime = System.currentTimeMillis();  //시작 시간
+
+        //퀵소트를 이용해 정렬
+        QuickSort s = new QuickSort(arr);
+
+        System.out.println(arr[index]);
+
+        //총 걸린 시간을 계산하는 과정
+        long afterTime = System.currentTimeMillis();
+        System.out.println("총 소요 시간: " + (afterTime - beforeTime) / 1000 + "초");
+    }
+}
