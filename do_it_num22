@@ -1,0 +1,56 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class do_it_num22 {  //10989
+    public static void main(String arg[]) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("데이터 개수: ");
+        int length = sc.nextInt();
+
+        System.out.println("배열 입력: ");
+        int arr[] = new int[length];
+        for (int i = 0; i < length; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        long beforeTime = System.currentTimeMillis();  //시작 시간
+
+        // 기수 정렬을 위한 10개의 리스트 생성
+        ArrayList<ArrayList<Integer>> listGroup = new ArrayList<ArrayList<Integer>>();
+        for(int i = 0; i < 10; i++) {
+            listGroup.add(new ArrayList<Integer>());
+        }
+
+        // 문제에서 주어진 최대 숫자가 10,000이므로 루프를 4번 돎
+        int divide = 1;
+        for(int cycle = 0; cycle < 4; cycle++) {
+            // i자리 숫자를 기준으로 버킷에 숫자를 넣음
+            for (int i = 0; i < length; i++) {
+                listGroup.get(arr[i] / divide % 10).add(arr[i]);
+            }
+
+            // 0부터 9번 버킷을 차례대로 돌면서 값을 정렬함
+            int index = 0;
+            for(int i = 0; i < 10; i++) {
+                for (int value : listGroup.get(i)) {
+                    arr[index++] = value;  // 원래 배열에 정렬
+                }
+
+                listGroup.get(i).clear();  // 다 돌았다면 버킷을 비워줌
+            }
+
+            divide *= 10;  // 루프를 한 번 돌 때마다, 나누는 값을 *10함
+        }
+
+        // 정렬 결과 출력
+        for(int i = 0; i < length; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+
+        //총 걸린 시간을 계산하는 과정
+        long afterTime = System.currentTimeMillis();
+        System.out.println("총 소요 시간: " + (afterTime - beforeTime) / 1000 + "초");
+    }
+}
